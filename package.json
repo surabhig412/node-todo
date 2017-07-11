@@ -1,0 +1,14 @@
+{
+  "name"         : "todo-list",
+  "version"      : "0.0.1",
+  "description"  : "Simple todo application",
+  "private"      : true,
+  "main"         : "todo.js",
+  "author"       : "Surabhi",
+  "dependencies" : {
+    "mysql": "~2.13.0",
+    "express": "~4.15.3",
+    "body-parser": "~1.17.2",
+    "jade": "~1.11.0"
+    }
+}

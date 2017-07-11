@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div style="padding:10px;">
+      <h1 class="text-center">TODO List</h1>
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+          <ul class="list-group todosList"></ul>
+        </div>
+        <div class="pull-right col-sm-4">
+          <input type="text" class="form-control todoText" placeholder="TODO Text" /><br/>
+          <button type="button" class="btn btn-default pull-right createTodo">Create</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $('.createTodo').off('click').on('click', function(){
+      $.ajax({
+        url: '/api/todos',
+        data: {text: $('.todoText').val().trim()},
+        method: 'post',
+        success: function(data) {
+          $('.todoText').val("");
+          $('.todosList').empty();
+          makeTodoList(data);
+        },
+        error: function(data) {
+          console.log("error occurred");
+        }
+    });
+  });
+  $(document).on('click', '.closeBtn', function(){
+    $.ajax({
+      url: '/api/todos/'.concat($(this).parents('.list-group-item').val()),
+      method: 'get',
+      success: function(data) {
+        $('.todosList').empty();
+        makeTodoList(data);
+      },
+      error: function(data) {
+        console.log("error occurred");
+      }
+  });
+  });
+  var makeTodoList = function(todos) {
+    var deleteIcon = "<span class='pull-right'> \
+                        <span class='btn btn-xs btn-default closeBtn'> \
+                          <span class='glyphicon glyphicon-remove' aria-hidden='true'></span> \
+                        </span> \
+                      </span>";
+    for(var i in todos) {
+      $('.todosList').append("<li class='list-group-item' value='".concat(todos[i].id).concat("'>").concat(todos[i].text).concat(deleteIcon).concat("</li>"));
+    }
+  }
+  </script>
+</html>
